@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>V1.0</title>
+	<style type="text/css">
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background-color: #b3cce6;
+		}
+		.quadratic-box {
+			position: relative;
+			width: 100%;
+			height: 500px;
+			background-color: #f0f0f0;
+			border-radius: 20px;
+			margin: 20px;
+		}
+		.quadratic-box img {
+			max-width: 100%;
+			max-height: 100%;
+			object-fit: contain;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+		.textfield-box {
+			width: 100%;
+			height: 250px;
+			background-color: #f0f0f0;
+			border-radius: 20px;
+			margin: 20px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+		.textfield {
+			width: 80%;
+			height: 80%;
+			padding: 10px;
+			box-sizing: border-box;
+			resize: none;
+			border-radius: 10px;
+			border: none;
+		}
+		button {
+			background-color: #4CAF50;
+			color: white;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 10px;
+			cursor: pointer;
+		}
+		button:hover {
+			outline: none;
+			opacity: 0.8;
+		}
+		button:active {
+			transform: translateY(2px);
+		}
+		button.show-list {
+			margin-left: 10px;
+		}
+        .item {
+            width: 350px;
+            height: 200px;
+            border: 2px solid black;
+            border-radius: 5px;
+            margin: 7px;
+            display: flex;
+			position: relative;
+        }
+        .item img {
+            max-width: 50%;
+            max-height: 80%;
+            object-fit: contain;
+            margin-right: 20px;
+        }
+        .item .text {
+            width: 50%;
+            height: 80%;
+            padding: 10px;
+            box-sizing: border-box;
+			overflow: auto;
+            text-overflow: ellipsis;
+        }
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            width: 100%;
+            margin-top: 20px;
+        } 
+		.posTaglist {
+			position: absolute;
+			top: 0;
+			left: 0;
+			margin: 0;
+			padding: 10px;
+			text-decoration: none;
+		}
+		.container{
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			gap: 20px;
+		}
+		.containDD5{
+			width: 50%;
+			display: flex;
+			flex-direction: column;
+			padding: 30px;	
+			align-items: center;
+			background-color: #b3b3cc;
+			border-radius: 20px;			
+			
+		}
+		.containTL2{
+			width: 50%;
+			display: flex;
+			flex-direction: column;
+			padding: 30px;
+			align-items: center;
+			background-color: #b3b3cc;
+			border-radius: 20px;
+			text-align: center;
+		}
+		.text-field {
+			width: 100%;
+			height: 2rem;
+			border: none;
+			background-color: white;
+			padding: 0.5rem;
+			resize: none;
+			font-size: 1rem;
+			line-height: 1.5;
+			outline: none;
+		}
+		.copy-message {
+			display: none;
+			position: absolute;
+			border-radius: 10px;
+			background-color: rgba(192, 192, 192, 0.8);
+			color: #333;padding: 10px;
+			font-weight: bold;
+			z-index: 1;
+		}
+		.scroll-y {
+			height: 100px;
+			overflow: auto;
+		}		
+		.container-other {
+			position: relative;
+			width: 100%;
+			height: 400px;
+			overflow: auto;
+		}
+		.container-Tags {
+			position: relative;
+			width: 100%;
+			height: 500px;
+		}
+		#console{
+			opacity: 1;
+		}		
+		.overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0,0,0,0.5);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.overlay img {
+			max-width: 80%;
+			max-height: 80%;
+		}
+	</style>
+</head>
+
+<body>
+<div class="copy-message">Copied!</div>
+<div class="container">
+
+	<div class="containDD5">
+	
+	<div class="quadratic-box">
+		<img src=".\placeholder.png" alt="Placeholder Image">		
+	</div>
+	<div class="textfield-box">
+		<textarea class="textfield" placeholder="Enter your text here"></textarea>
+	</div>
+	<div><button class="save-button">Save</button></div>
+	<div id="console"></div>
+	</div>
+	
+	
+	<div class="containTL2">	
+	
+		<div class="container-Tags">
+		<h2>Tags</h2>
+		<div>
+		<label for="search">|Search:</label>
+		<input type="text" id="search" onkeyup="searchWords()" placeholder="Enter a word...">
+		<label for="lists">|List:</label>
+		<select id="lists" onchange="searchWords()">
+			<option value="list1">Tags</option>
+			<option value="list2">Animals</option>
+			<!--add other lists here
+			<option value="list3">List 3</option>
+			<option value="list4">List 4</option>
+			<option value="list5">List 5</option>
+			-->
+		</select>|<br></br>
+		</div>
+			<textarea readonly id="stored-words" class="text-field" placeholder="Taglist" style="text-align: center"></textarea>
+			<button id="copyButton">Copy Text</button>
+			<br></br>
+			<textarea id="edittags" class="text-field" placeholder="Edit" style="text-align: center"></textarea>
+			<button id="copyButton2">Copy Text</button>
+		<em><p>Tags Matched</p></em>
+		<div class="scroll-y" id="results"></div>
+		</div>
+		
+		<div class="container-other">		
+		<h2>Keywords</h2>
+		<!--add prompts here-->
+		<details><summary style="text-align: center;">negative prompts</summary>
+		  <ul class="scroll-y">
+			<li onclick="copyToClipboard(event, this)">Hello World</li>
+			
+		  </ul class="scroll-y">
+		</details>
+		<details><summary style="text-align: center;">positive prompts</summary>
+		  <ul class="scroll-y">
+			<li onclick="copyToClipboard(event, this)">Hello World</li>
+		  </ul>
+		</details>
+		
+		<div>
+		<center><button id="add-link-btn">Add Link</button></center>
+			<div id="link-container">
+			<a style="text-decoration: none;"href="https://"></a>
+			<!--add links here-->
+			</div>
+		</div>	
+		<div>
+			<a id="localhost-link" href="http://127.0.0.1">localhost</a>
+			<input id="port-input" type="text" placeholder="Port">
+			<button onclick="goToPort()">Go</button>
+			<p>Drag and Drop Image from Your PC or Website into field</p>
+			<p>Shift + Click = Enlarge Image | Ctrl + X + Click = Remove Image From Database</p>
+			<p>Deleting your cookies can remove stored data</p>
+		</div>
+		</div>
+	</div>
+	
+</div>		
+<div class="flex-container"></div>
+		
+</body>
+
+
+<script type="text/javascript">
+let db;
+
+const request = indexedDB.open("imageData", 1);
+const quadraticBox = document.querySelector('.quadratic-box');
+const textfield = document.querySelector('.textfield');
+const saveButton = document.querySelector('.save-button');
+const savedItemsContainer = document.querySelector('.flex-container');
+
+
+let selectedImage = null;
+document.addEventListener('click', function(event) {
+  if (event.shiftKey && event.target.nodeName === 'IMG') {
+    selectedImage = event.target;
+    const imgSrc = selectedImage.src;
+	const overlay = document.createElement('div');
+	overlay.classList.add('overlay');
+	const img = document.createElement('img');
+	img.src = imgSrc;
+	overlay.appendChild(img);
+	document.body.appendChild(overlay);
+	overlay.addEventListener('click', function() {
+		document.body.removeChild(overlay);
+		selectedImage = null;
+	});
+  }
+});
+
+
+function goToPort() {
+    var port = document.getElementById("port-input").value;
+    if (port) {
+      window.open("http://127.0.0.1:" + port, '_blank');
+    }
+}
+
+var oldConsoleLog = console.log;
+  console.log = function(message) {
+    oldConsoleLog.apply(console, arguments);
+    var consoleDiv = document.getElementById("console");
+    var messageDiv = document.createElement("div");
+    messageDiv.textContent = message;
+    consoleDiv.appendChild(messageDiv);
+    setTimeout(function() {
+      messageDiv.style.transition = "opacity 1s ease-out";
+      messageDiv.style.opacity = 0;
+      setTimeout(function() {
+        messageDiv.parentNode.removeChild(messageDiv);
+      }, 1000);
+    }, 2000);
+};
+  
+  
+request.onerror = function(event) {
+  console.log("Database error: " + event.target.errorCode);
+};
+
+request.onsuccess = function(event) {
+  db = event.target.result;
+  displaySavedItems();
+};
+
+request.onupgradeneeded = function(event) {
+  db = event.target.result;
+  const objectStore = db.createObjectStore("images", { keyPath: "id", autoIncrement:true });
+  objectStore.createIndex("image", "image", { unique: false });
+  objectStore.createIndex("text", "text", { unique: false });
+};
+
+function displaySavedItems() {
+  savedItemsContainer.innerHTML = '';
+  const objectStore = db.transaction("images").objectStore("images");
+  
+  objectStore.openCursor().onsuccess = function(event) {
+    const cursor = event.target.result;
+
+    if (cursor) {
+      const savedItem = document.createElement('div');
+      savedItem.classList.add('item');
+      savedItem.innerHTML = `
+        <img src="${cursor.value.image}" alt="key: ${cursor.key}">
+        <div class="text" onclick="copyToClipboard(event, this)">${cursor.value.text}</div>
+      `;
+      savedItemsContainer.appendChild(savedItem);
+      cursor.continue();
+    }
+  }
+}
+
+
+
+
+
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.keyCode === 88) {
+    document.body.style.cursor = 'pointer';
+  }
+});
+
+document.addEventListener('keyup', function(e) {
+  if (e.ctrlKey && e.keyCode === 88) {
+    document.body.style.cursor = 'auto';
+  }
+});
+
+savedItemsContainer.addEventListener('click', function(e) {
+  if (document.body.style.cursor === 'pointer') {
+    const item = e.target.closest('.item');
+    if (item) {
+      const key = parseInt(item.querySelector('img').getAttribute('alt').split(': ')[1]);
+      const objectStore = db.transaction("images", "readwrite").objectStore("images");
+      const request = objectStore.delete(key);
+      request.onsuccess = function(event) {
+        item.remove();
+      };
+    }
+  }
+});
+
+
+
+quadraticBox.addEventListener('dragover', function(e) {
+  e.preventDefault();
+});
+quadraticBox.addEventListener('drop', function(e) {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    quadraticBox.innerHTML = `<img src="${e.target.result}" alt="Dragged Image">`;
+  };
+  reader.readAsDataURL(file);
+});
+
+
+
+saveButton.addEventListener('click', function() {
+  const imageSrc = quadraticBox.querySelector('img').src;
+  const text = textfield.value;
+
+  const savedItem = document.createElement('div');
+  savedItem.classList.add('item');
+  savedItem.innerHTML = `
+    <img src="${imageSrc}">
+    <div class="text" onclick="copyToClipboard(event, this)">${text}</div>
+  `;
+  savedItemsContainer.appendChild(savedItem);
+
+  const objectStore = db.transaction("images", "readwrite").objectStore("images");
+  const newItem = {
+    image: imageSrc,
+    text: text
+  };
+  const request = objectStore.add(newItem);
+  request.onsuccess = function() {
+    console.log("Image saved to database");
+  };
+});
+</script>
+<script>
+//Script for lists
+
+//Add Lists Here ->
+const list1 = `Hello World`.split(' ');
+const list2 = `Dog Cat`.split(' ');
+		
+const map1 = new Map(list1.map(word => [word.toLowerCase(), word]));
+const map2 = new Map(list2.map(word => [word.toLowerCase(), word]));		
+//<-
+		
+		const storedWords = [];			
+		const textarea = document.getElementById("edittags");
+
+textarea.addEventListener("input", function() {
+
+  const lines = textarea.value.split("\n");
+  let output = "";
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].replace(/ /g, "_"); 
+    
+	let longestMatch = "";
+	for (let j = 0; j < list1.length; j++) {
+		const str = list1[j];
+		if (str.length > 1 && line.includes(str) && str.length > longestMatch.length) {
+		longestMatch = str;
+		}
+	}
+
+	if (longestMatch !== "") {
+		//console.log(`Line ${i+1} contains ${longestMatch}`);
+		output += longestMatch + "," + "\n";
+		}
+    }
+	textarea.value = output;
+});
+//end of Script for new lists
+
+
+	const addLinkBtn = document.getElementById("add-link-btn");
+	const linkContainer = document.getElementById("link-container");
+	addLinkBtn.addEventListener("click", function() {
+		const userLink = prompt("Please enter a link:");
+		const userName = prompt("Please enter a name for the link:");
+		if (userLink && userName) {
+			const link = document.createElement("a");
+			link.style.textDecoration = "none";
+			link.id = "download";
+			link.href = userLink;
+			link.innerText = userName + "  |";linkContainer.appendChild(link);}});
+
+const copyButton = document.getElementById("copyButton");
+const copyButton2 = document.getElementById("copyButton2");
+
+copyButton.addEventListener("click", handleCopyButtonClick);
+copyButton2.addEventListener("click", handleCopyButtonClick2);
+
+function handleCopyButtonClick() {
+  const textToCopy = document.getElementById("stored-words").value;
+
+  const tempElement = document.createElement("textarea");
+  tempElement.value = textToCopy;
+
+  document.body.appendChild(tempElement);
+
+  tempElement.select();
+
+  document.execCommand("copy");
+
+  document.body.removeChild(tempElement);
+
+  const messageElement = document.createElement("div");
+  messageElement.style.display = "block";
+  messageElement.textContent = "Copied!";
+  messageElement.classList.add("copy-message");
+  messageElement.style.top = `${copyButton.offsetTop-50}px`;
+  messageElement.style.left = `${copyButton.offsetLeft}px`;
+  document.body.appendChild(messageElement);
+  setTimeout(function() {
+    document.body.removeChild(messageElement);
+  }, 1000);
+}
+
+function handleCopyButtonClick2() {
+  const textToCopy = document.getElementById("edittags").value;
+
+  const tempElement = document.createElement("textarea");
+  tempElement.value = textToCopy;
+
+  document.body.appendChild(tempElement);
+
+  tempElement.select();
+
+  document.execCommand("copy");
+
+  document.body.removeChild(tempElement);
+
+  const messageElement = document.createElement("div");
+  messageElement.style.display = "block";
+  messageElement.textContent = "Copied!";
+  messageElement.classList.add("copy-message");
+  messageElement.style.top = `${copyButton2.offsetTop-50}px`;
+  messageElement.style.left = `${copyButton2.offsetLeft}px`;
+  document.body.appendChild(messageElement);
+  setTimeout(function() {
+    document.body.removeChild(messageElement);
+  }, 1000);
+}
+		
+		function searchWords() {const input = document.getElementById("search").value.toLowerCase();const list = document.getElementById("lists").value;let map;
+			switch (list) {
+				case "list1":
+					map = map1;
+					break;
+				case "list2":
+					map = map2;
+					break;
+				case "list3":
+					map = map3;
+					break;
+				case "list4":
+					map = map4;
+					break;
+				case "list5":
+					map = map5;
+				//Add more lists here
+					break;
+				default:
+					map = new Map();
+			}
+  const results = [...map.entries()].filter(([key, value]) => key.includes(input)).map(([key, value]) => value);
+  const resultsElement = document.getElementById("results");
+
+  if (results.length > 0) {
+    resultsElement.innerHTML = results.map(result => `<span class="clickable">${result}</span>`).join(", ");
+    const clickableElements = resultsElement.querySelectorAll(".clickable");
+    clickableElements.forEach(element => {
+      element.addEventListener("click", event => {
+        storedWords.push(event.target.textContent);
+        console.log(storedWords);
+		showStoredWords();
+      });
+    });
+  } else {
+    resultsElement.innerHTML = "No results found.";
+  }
+}
+
+function showStoredWords() {
+  const storedWordsElement = document.getElementById("stored-words");
+  const existingWords = storedWordsElement.value.split(", ");
+  const newWords = storedWords.filter(word => !existingWords.includes(word));
+  if (newWords.length === 0) {
+    return;
+  }
+  const wordList = newWords.join(", ");
+  if (storedWordsElement.value !== '') {
+    storedWordsElement.value += ', ' + wordList;
+  } else {
+    storedWordsElement.value = wordList;
+  }
+}
+	
+function copyToClipboard(event, element) {
+	var range = document.createRange();
+	range.selectNodeContents(element);
+	var selection = window.getSelection();
+	selection.removeAllRanges();
+	selection.addRange(range);
+	document.execCommand("copy");
+	var copyMessage = document.querySelector('.copy-message');
+	copyMessage.style.display = 'block';copyMessage.style.top = event.clientY + 'px';copyMessage.style.left = event.clientX + 'px';
+	setTimeout(function() {copyMessage.style.display = 'none';}, 1000);}
+	</script>	
+
+</html>
